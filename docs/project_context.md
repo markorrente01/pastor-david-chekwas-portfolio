@@ -119,7 +119,7 @@ Use an expressive portrait composition, oversized typography, layered depth, and
 
 The definitive motion reference is the upgraded standalone HTML showcase:
 
-`kairo-animation-showcase-v2.html`
+`DAVID-animation-showcase-v2.html`
 
 The project identity has changed to David Chekwas, but the approved animation direction remains unchanged.
 
