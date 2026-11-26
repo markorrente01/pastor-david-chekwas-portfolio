@@ -20,7 +20,8 @@ export function NotFoundPage() {
 
         <Link
           to="/"
-          className="mt-9 inline-flex min-h-12 items-center rounded-full bg-brand-ink px-6 text-sm font-medium text-brand-white transition-colors hover:bg-brand-gold hover:text-brand-ink"
+          data-button-tone="dark"
+          className="site-button mt-9 inline-flex min-h-12 items-center rounded-full px-6 text-sm font-medium"
         >
           Back to homepage
         </Link>

@@ -1,152 +1,169 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { ArrowUpRight, Menu, X } from "lucide-react";
-import { cn } from "../../../shared/utils/cn";
 
-interface NavigationItem {
-  label: string;
-  to: string;
-  end?: boolean;
-}
-
-const primaryNavigation: NavigationItem[] = [
-  { label: "Home", to: "/", end: true },
+const navigation = [
   { label: "About", to: "/about" },
   { label: "Speaking", to: "/speaking" },
   { label: "Media", to: "/media" },
   { label: "Events", to: "/events" },
-  { label: "Insights", to: "/insights" },
-];
-
-const mobileNavigation: NavigationItem[] = [
-  ...primaryNavigation,
   { label: "Testimonials", to: "/testimonials" },
+  { label: "Insights", to: "/insights" },
   { label: "Resources", to: "/resources" },
 ];
 
-const linkStyles = ({ isActive }: { isActive: boolean }) =>
-  cn(
-    "text-sm font-medium transition-colors duration-200",
-    isActive
-      ? "text-brand-ink"
-      : "text-brand-muted hover:text-brand-ink",
-  );
-
 export function PublicNavigation() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    if (!isMenuOpen) return;
+    const handleScroll = () => setScrolled(window.scrollY > 24);
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setIsMenuOpen(false);
-      }
+      if (event.key === "Escape") setMenuOpen(false);
     };
 
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
+      document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isMenuOpen]);
+  }, [menuOpen]);
+
+  const closeMenu = () => setMenuOpen(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-brand-ink/10 bg-brand-ivory/95 backdrop-blur-md">
-      <div className="mx-auto flex h-20 max-w-[1440px] items-center justify-between px-5 sm:px-8 lg:px-12">
-        <Link
-          to="/"
-          className="flex flex-col gap-0.5"
-          aria-label="David Chekwas homepage"
-          onClick={() => setIsMenuOpen(false)}
-        >
-          <span className="font-display text-lg font-bold tracking-tight text-brand-ink">
-            DAVID CHEKWAS<span className="text-brand-gold">.</span>
-          </span>
-          <span className="text-[9px] font-medium tracking-[0.2em] text-brand-muted">
-            ENTREPRENEUR · STRATEGIST · SPEAKER
-          </span>
-        </Link>
-
-        <nav
-          aria-label="Main navigation"
-          className="hidden items-center gap-7 lg:flex"
-        >
-          {primaryNavigation.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.end}
-              className={linkStyles}
-            >
-              {item.label}
-            </NavLink>
-          ))}
-        </nav>
-
-        <div className="hidden lg:block">
-          <Link
-            to="/contact"
-            className="inline-flex min-h-11 items-center gap-2 rounded-full bg-brand-ink px-5 text-sm font-medium text-brand-white transition-colors hover:bg-brand-gold hover:text-brand-ink"
-          >
-            Book David
-            <ArrowUpRight size={16} aria-hidden="true" />
-          </Link>
-        </div>
-
-        <button
-          type="button"
-          className="inline-flex size-11 items-center justify-center rounded-full border border-brand-ink/15 text-brand-ink transition-colors hover:bg-brand-gold lg:hidden"
-          aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
-          aria-expanded={isMenuOpen}
-          aria-controls="mobile-navigation"
-          onClick={() => setIsMenuOpen((previous) => !previous)}
-        >
-          {isMenuOpen ? (
-            <X size={21} aria-hidden="true" />
-          ) : (
-            <Menu size={21} aria-hidden="true" />
-          )}
-        </button>
-      </div>
-
-      <nav
-        id="mobile-navigation"
-        aria-label="Mobile navigation"
-        hidden={!isMenuOpen}
-        className="border-t border-brand-ink/10 bg-brand-ivory px-5 py-6 lg:hidden"
+    <>
+      <header
+        className={`editorial-nav ${scrolled ? "is-scrolled" : ""}`}
       >
-        <div className="flex flex-col gap-5">
-          {mobileNavigation.map((item, index) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.end}
-              className={({ isActive }) =>
-                cn(
-                  "flex items-center justify-between text-lg font-medium transition-colors",
-                  isActive ? "text-brand-ink" : "text-brand-muted",
-                )
-              }
-              onClick={() => setIsMenuOpen(false)}
-            >
-              {item.label}
-              <span className="text-xs text-brand-muted">
-                {String(index + 1).padStart(2, "0")}
-              </span>
-            </NavLink>
-          ))}
-
+        <div className="editorial-nav-inner">
           <Link
-            to="/contact"
-            onClick={() => setIsMenuOpen(false)}
-            className="mt-2 inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-brand-ink px-5 text-sm font-medium text-brand-white"
+            to="/"
+            className="editorial-brand"
+            aria-label="David Chekwas homepage"
+            onClick={closeMenu}
           >
-            Book David
-            <ArrowUpRight size={16} aria-hidden="true" />
+            <span className="editorial-brand-name">
+              DAVID <span>CHEKWAS</span>
+            </span>
+            <span className="editorial-brand-caption">
+              ENTREPRENEUR · STRATEGIST · SPEAKER
+            </span>
           </Link>
+
+          <nav className="editorial-desktop-links" aria-label="Main navigation">
+            {navigation.map((item, index) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                className={({ isActive }) =>
+                  `editorial-nav-link ${isActive ? "is-active" : ""}`
+                }
+              >
+                <span className="editorial-link-index">
+                  0{index + 1}
+                </span>
+                <span>{item.label}</span>
+              </NavLink>
+            ))}
+          </nav>
+
+          <div className="editorial-nav-actions">
+            <Link to="/contact" className="editorial-book-link">
+              <span>Invite David</span>
+              <span className="editorial-book-icon">
+                <ArrowUpRight size={16} strokeWidth={1.7} />
+              </span>
+            </Link>
+
+            <button
+              type="button"
+              className={`editorial-menu-toggle ${menuOpen ? "is-open" : ""}`}
+              aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
+              aria-expanded={menuOpen}
+              aria-controls="editorial-mobile-menu"
+              onClick={() => setMenuOpen((open) => !open)}
+            >
+              <span>{menuOpen ? "CLOSE" : "MENU"}</span>
+              <span className="editorial-menu-icon">
+                {menuOpen ? <X size={21} /> : <Menu size={21} />}
+              </span>
+            </button>
+          </div>
         </div>
-      </nav>
-    </header>
+
+        <div className="editorial-nav-progress" />
+      </header>
+
+      <div
+        id="editorial-mobile-menu"
+        className={`editorial-mobile-menu ${menuOpen ? "is-open" : ""}`}
+        aria-hidden={!menuOpen}
+        inert={!menuOpen}
+      >
+        <div className="editorial-mobile-menu-content">
+          <div className="editorial-mobile-menu-heading">
+            <span>EXPLORE</span>
+            <span>THE WORLD OF DAVID CHEKWAS</span>
+          </div>
+
+          <nav className="editorial-mobile-links" aria-label="Mobile navigation">
+            {navigation.map((item, index) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                onClick={closeMenu}
+                className={({ isActive }) =>
+                  `editorial-mobile-link ${isActive ? "is-active" : ""}`
+                }
+                style={{ "--menu-index": index } as React.CSSProperties}
+              >
+                <span className="editorial-mobile-index">
+                  0{index + 1}
+                </span>
+                <span className="editorial-mobile-label">{item.label}</span>
+                <ArrowUpRight size={22} strokeWidth={1.4} />
+              </NavLink>
+            ))}
+          </nav>
+
+          <div className="editorial-mobile-bottom">
+            <div>
+              <span className="editorial-mobile-bottom-label">HAVE AN EVENT IN MIND?</span>
+              <p>Let's make it meaningful.</p>
+            </div>
+
+            <Link
+              to="/contact"
+              className="editorial-mobile-cta"
+              onClick={closeMenu}
+            >
+              Invite David to speak
+              <ArrowUpRight size={19} />
+            </Link>
+          </div>
+
+          <div className="editorial-mobile-signature">
+            <span>BASED IN AFRICA</span>
+            <span className="editorial-signature-dot" />
+            <span>SPEAKING GLOBALLY</span>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }

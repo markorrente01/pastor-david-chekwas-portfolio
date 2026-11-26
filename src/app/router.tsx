@@ -1,7 +1,16 @@
 import { createBrowserRouter } from "react-router-dom";
 import { PublicLayout } from "./layouts/PublicLayout";
 import { NotFoundPage } from "../features/public/pages/NotFoundPage";
-import { PublicPlaceholderPage } from "../features/public/pages/PublicPlaceholderPage";
+import { HomePage } from "../features/public/pages/HomePage";
+import { SpeakingPage } from "../features/public/pages/SpeakingPage";
+import { AboutPage } from "../features/public/pages/AboutPage";
+import { MediaPage } from "../features/public/pages/MediaPage";
+import { EventsPage } from "../features/public/pages/EventsPage";
+import { InsightsPage } from "../features/public/pages/InsightsPage";
+import { InsightsArticlePage } from "../features/public/pages/InsightsArticlePage";
+import { ResourcesPage } from "../features/public/pages/ResourcesPage";
+import { TestimonialsPage } from "../features/public/pages/TestimonialsPage";
+import { ContactPage } from "../features/public/pages/ContactPage";
 
 export const router = createBrowserRouter([
   {
@@ -10,48 +19,43 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: (
-          <PublicPlaceholderPage
-            title="Welcome"
-            description="A journey of ideas, leadership and meaningful impact. Discover the work, speaking and perspectives of David Chekwas."
-          />
-        ),
+        element: <HomePage />,
       },
       {
         path: "about",
-        element: <PublicPlaceholderPage title="About David" />,
+        element: <AboutPage />,
       },
       {
         path: "speaking",
-        element: <PublicPlaceholderPage title="Speaking" />,
+        element: <SpeakingPage />,
       },
       {
         path: "media",
-        element: <PublicPlaceholderPage title="Media" />,
+        element: <MediaPage />,
       },
       {
         path: "events",
-        element: <PublicPlaceholderPage title="Events" />,
+        element: <EventsPage />,
       },
       {
         path: "testimonials",
-        element: <PublicPlaceholderPage title="Testimonials" />,
+        element: <TestimonialsPage />,
       },
       {
         path: "insights",
-        element: <PublicPlaceholderPage title="Insights" />,
+        element: <InsightsPage />,
       },
       {
         path: "insights/:slug",
-        element: <PublicPlaceholderPage title="Insight" />,
+        element: <InsightsArticlePage />,
       },
       {
         path: "resources",
-        element: <PublicPlaceholderPage title="Resources" />,
+        element: <ResourcesPage />,
       },
       {
         path: "contact",
-        element: <PublicPlaceholderPage title="Contact" />,
+        element: <ContactPage />,
       },
       {
         path: "*",

@@ -41,7 +41,8 @@ export function PublicPlaceholderPage({
 
           <Link
             to="/contact"
-            className="mt-10 inline-flex min-h-12 items-center gap-3 rounded-full bg-brand-ink px-6 text-sm font-medium text-brand-white transition-colors hover:bg-brand-gold hover:text-brand-ink"
+            data-button-tone="dark"
+            className="site-button mt-10 inline-flex min-h-12 items-center gap-3 rounded-full px-6 text-sm font-medium"
           >
             Get in touch
             <ArrowUpRight size={17} aria-hidden="true" />
