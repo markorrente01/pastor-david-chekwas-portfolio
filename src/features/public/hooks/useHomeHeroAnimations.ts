@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 import type { RefObject } from "react";
 import { gsap } from "../../../shared/animations/gsap";
 
@@ -11,7 +11,7 @@ export function useHomeHeroAnimations({
   heroRef,
   portraitRef,
 }: HomeHeroAnimationRefs) {
-  useEffect(() => {
+  useLayoutEffect(() => {
     const hero = heroRef.current;
     const portrait = portraitRef.current;
 
